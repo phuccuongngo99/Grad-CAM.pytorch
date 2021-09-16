@@ -76,11 +76,11 @@ class GradCAM(object):
         cam -= np.min(cam)
         cam /= np.max(cam)
         # resize to 224*224
-        box = output[0]['instances'].pred_boxes.tensor[index].detach().numpy().astype(np.int32)
+        box = output[0]['instances'].pred_boxes.tensor[index].detach().cpu().numpy().astype(np.int32)
         x1, y1, x2, y2 = box
         cam = cv2.resize(cam, (x2 - x1, y2 - y1))
 
-        class_id = output[0]['instances'].pred_classes[index].detach().numpy()
+        class_id = output[0]['instances'].pred_classes[index].detach().cpu().numpy()
         return cam, box, class_id
 
     def get_mask_all_detection(self, inputs):
@@ -119,11 +119,11 @@ class GradCAM(object):
             cam -= np.min(cam)
             cam /= np.max(cam)
             # resize to 224*224
-            box = output[0]['instances'].pred_boxes.tensor[index].detach().numpy().astype(np.int32)
+            box = output[0]['instances'].pred_boxes.tensor[index].detach().cpu().numpy().astype(np.int32)
             x1, y1, x2, y2 = box
             cam = cv2.resize(cam, (x2 - x1, y2 - y1))
 
-            class_id = output[0]['instances'].pred_classes[index].detach().numpy()
+            class_id = output[0]['instances'].pred_classes[index].detach().cpu().numpy()
             
             # Putting the result in a dict
             obj_dict = {}
@@ -175,7 +175,7 @@ class GradCamPlusPlus(GradCAM):
         cam -= np.min(cam)
         cam /= np.max(cam)
         # resize to box scale
-        box = output[0]['instances'].pred_boxes.tensor[index].detach().numpy().astype(np.int32)
+        box = output[0]['instances'].pred_boxes.tensor[index].detach().cpu().numpy().astype(np.int32)
         x1, y1, x2, y2 = box
         cam = cv2.resize(cam, (x2 - x1, y2 - y1))
 
@@ -224,11 +224,11 @@ class GradCamPlusPlus(GradCAM):
             cam -= np.min(cam)
             cam /= np.max(cam)
             # resize to box scale
-            box = output[0]['instances'].pred_boxes.tensor[index].detach().numpy().astype(np.int32)
+            box = output[0]['instances'].pred_boxes.tensor[index].detach().cpu().numpy().astype(np.int32)
             x1, y1, x2, y2 = box
             cam = cv2.resize(cam, (x2 - x1, y2 - y1))
 
-            class_id = output[0]['instances'].pred_classes[index].detach().numpy()
+            class_id = output[0]['instances'].pred_classes[index].detach().cpu().numpy()
             
             # Putting the result in a dict
             obj_dict = {}
