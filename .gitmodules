@@ -1,3 +1,3 @@
 [submodule "detectron2_gradcam"]
 	path = detectron2_gradcam
-	url = git@github.com:phuccuongngo99/detectron2_gradcam.git
+	url = https://github.com/phuccuongngo99/detectron2_gradcam.git
