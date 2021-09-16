@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import cv2
 import argparse
+from tqdm import tqdm
 
 from detectron2 import model_zoo
 from detectron2.config import CfgNode
@@ -176,7 +177,7 @@ def gradcam_single_img(args, img_path: str, output_folder: str):
 # inference on the folder 
 # just call on single image multiple time
 def main(args):
-    for img_file in os.listdir(args.img_folder):
+    for img_file in tqdm(os.listdir(args.img_folder)):
         img_path = os.path.join(args.img_folder, img_file)
         gradcam_single_img(args, img_path, args.output)
 
