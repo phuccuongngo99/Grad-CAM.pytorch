@@ -82,8 +82,7 @@ def get_gradcam_mask(method: str, model: torch.nn.Module, input_dict: dict) -> l
         # TODO write get_mask_all_detection for gradcamplusplus
         grad_cam = GradCamPlusPlus(model, LAYER_NAME)
 
-    result_list = grad_cam.get_mask_all_detection(input_dict)
-    grad_cam.remove_handlers()
+
 
     return result_list
     
@@ -158,13 +157,13 @@ def save_heatmaps(
         cv2.imwrite(output_path, heatmap)
 
 # inference on a single image
-def gradcam_single_img(args, img_path: str, output_folder: str):
-    model, cfg = get_model(args)
-    
+def gradcam_single_img(args, cfg, gradcam_model, img_path: str, output_folder: str):
     input_dict = get_img_input_dict(cfg, img_path)
     
-    result_list = get_gradcam_mask(args.method, model, input_dict)
-    
+    result_list = gradcam_model.get_mask_all_detection(input_dict)
+    # TODO Check if this breaks anything or not
+    gradcam_model.remove_handlers()
+
     #save image (with all your format)
     img_name = os.path.basename(img_path)
     output_folder = os.path.join(output_folder, args.method)
@@ -174,12 +173,21 @@ def gradcam_single_img(args, img_path: str, output_folder: str):
     save_heatmaps(original_img, result_list, output_folder, img_name, args.clsname_list)
 
 
+def gradcam(mode: str, model):
+    if mode == 'gradcam':
+        return GradCAM(model, LAYER_NAME)
+    elif mode == 'gradcam++':
+        return GradCamPlusPlus(model, LAYER_NAME)
+
 # inference on the folder 
 # just call on single image multiple time
 def main(args):
+    model, cfg = get_model(args)
+    gradcam_model = gradcam(args.mode, model)
+
     for img_file in tqdm(os.listdir(args.img_folder)):
         img_path = os.path.join(args.img_folder, img_file)
-        gradcam_single_img(args, img_path, args.output)
+        gradcam_single_img(args, cfg, gradcam_model, img_path, args.output)
 
 
 if __name__ == "__main__":
