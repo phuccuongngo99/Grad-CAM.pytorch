@@ -20,6 +20,7 @@ from grad_cam import GradCAM, GradCamPlusPlus
 LAYER_NAME = "roi_heads.res5.2.conv3"
 MODEL_ARCHI = "COCO-Detection/faster_rcnn_R_50_C4_1x.yaml"
 
+
 def get_args():
     parser = argparse.ArgumentParser(description="Detectron2 demo for builtin models")
 
@@ -71,21 +72,6 @@ def get_args():
 
     return parser.parse_args()
 
-def get_gradcam_mask(method: str, model: torch.nn.Module, input_dict: dict) -> list:
-    '''
-    return: (num of object detected, 7, 7) 
-    7 x 7 is for mask
-    '''
-    if method == 'gradcam':
-        grad_cam = GradCAM(model, LAYER_NAME)
-    elif method == 'gradcam++':
-        # TODO write get_mask_all_detection for gradcamplusplus
-        grad_cam = GradCamPlusPlus(model, LAYER_NAME)
-
-
-
-    return result_list
-    
 
 def get_model(args) -> torch.nn.Module:
     # load config from file and command-line arguments
@@ -121,6 +107,7 @@ def get_img_input_dict(d2_cfg: CfgNode, img_path: str) -> dict:
     inputs = {"image": image, "height": height, "width": width}
     return inputs
 
+
 def combine_mask_to_img(image, mask):
     image = image.copy()
     
@@ -132,6 +119,7 @@ def combine_mask_to_img(image, mask):
     image /= np.max(image)
     image *= 255.
     return np.uint8(image)
+
 
 def save_heatmaps(
     original_img: np.ndarray,
@@ -154,15 +142,18 @@ def save_heatmaps(
         output_path = os.path.join(output_folder,
             '{}_obj_{}_{}_{:.2f}.jpg'.format(img_name, i, cls_name, conf))
         
+        # resize to make it larger
+        scale = 10
+        heatmap = cv2.resize(heatmap, (heatmap.shape[0]*scale, heatmap.shape[1]*10), interpolation = cv2.INTER_CUBIC)
+
         cv2.imwrite(output_path, heatmap)
+
 
 # inference on a single image
 def gradcam_single_img(args, cfg, gradcam_model, img_path: str, output_folder: str):
     input_dict = get_img_input_dict(cfg, img_path)
     
     result_list = gradcam_model.get_mask_all_detection(input_dict)
-    # TODO Check if this breaks anything or not
-    gradcam_model.remove_handlers()
 
     #save image (with all your format)
     img_name = os.path.basename(img_path)
@@ -178,6 +169,7 @@ def gradcam(method: str, model):
         return GradCAM(model, LAYER_NAME)
     elif method == 'gradcam++':
         return GradCamPlusPlus(model, LAYER_NAME)
+
 
 # inference on the folder 
 # just call on single image multiple time
