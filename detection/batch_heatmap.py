@@ -173,17 +173,17 @@ def gradcam_single_img(args, cfg, gradcam_model, img_path: str, output_folder: s
     save_heatmaps(original_img, result_list, output_folder, img_name, args.clsname_list)
 
 
-def gradcam(mode: str, model):
-    if mode == 'gradcam':
+def gradcam(method: str, model):
+    if method == 'gradcam':
         return GradCAM(model, LAYER_NAME)
-    elif mode == 'gradcam++':
+    elif method == 'gradcam++':
         return GradCamPlusPlus(model, LAYER_NAME)
 
 # inference on the folder 
 # just call on single image multiple time
 def main(args):
     model, cfg = get_model(args)
-    gradcam_model = gradcam(args.mode, model)
+    gradcam_model = gradcam(args.method, model)
 
     for img_file in tqdm(os.listdir(args.img_folder)):
         img_path = os.path.join(args.img_folder, img_file)
