@@ -130,7 +130,7 @@ class GradCAM(object):
             obj_dict['cam'] = cam
             obj_dict['box'] = box
             obj_dict['class_id'] = class_id
-            obj_dict['conf'] = score.item()
+            obj_dict['conf'] = score.detach().item()
             
             list_dict.append(obj_dict)
  
