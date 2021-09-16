@@ -58,7 +58,6 @@ class GradCAM(object):
         """
         self.net.zero_grad()
         output = self.net.inference([inputs])
-        print(output)
         score = output[0]['instances'].scores[index]
         proposal_idx = output[0]['instances'].indices[index]  # box来自第几个proposal
         score.backward()
