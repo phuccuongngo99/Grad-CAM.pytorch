@@ -1,4 +1,35 @@
-# Grad-CAM.pytorch
+# Instruction for this fork
+**NOTE that this folk ONLY SUPPORT model with detectron2's FPN_C4 architecture**
+
+## Set up the repo
+```
+git clone --recurse-submodules https://github.com/phuccuongngo99/Grad-CAM.pytorch.git
+cd detectron2
+pip install -e .
+cd ..
+```
+## Gradcam method
+```
+python detection/batch_heatmap.py 
+      --pretrained ./path_to_your_pretrained_model/your_model.pth \
+      --img_folder ./path_to_your_img_folder \
+      --output ./path_to_your_output_folder \
+      --device cuda \
+      --method gradcam
+```
+
+## Gradcam++ method
+```
+python detection/batch_heatmap.py 
+      --pretrained ./path_to_your_pretrained_model/your_model.pth \
+      --img_folder ./path_to_your_img_folder \
+      --output ./path_to_your_output_folder \
+      --device cuda \
+      --method gradcam++
+```
+
+
+# (Original README by author) Grad-CAM.pytorch
 
 ​          pytorch 实现[Grad-CAM:Visual Explanations from Deep Networks via Gradient-based Localization](https://arxiv.org/pdf/1610.02391) 和
 
