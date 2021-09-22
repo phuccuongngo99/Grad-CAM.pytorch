@@ -1,6 +1,11 @@
 # Instruction for this fork
 **NOTE that this folk ONLY SUPPORT model with detectron2's FPN_C4 architecture**
 
+## Requirements
+conda environment with
+- Pytorch 1.8 & above
+- Python 3.7 & above
+
 ## Set up the repo
 ```
 git clone --recurse-submodules https://github.com/phuccuongngo99/Grad-CAM.pytorch.git
